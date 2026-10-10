@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Organized.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Instrument+Serif&display=swap" rel="stylesheet" />
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper: #ffffff;
+      --ink: #1a1a1a;
+      --navy: #15152e;
+      --tray: #f5f5f5;
+      --gutter: clamp(20px, 7.7vw, 140px);
+      --vh: 1vh;
+    }
+
+    @supports (height: 1svh) {
+      :root {
+        --vh: 1svh;
+      }
+    }
+
+    html,
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---------- Scroll track + pinned stage ---------- */
+    .hero {
+      position: relative;
+      /* 100 pinned + 90 of scroll-driven animation + 40 hold on the finished dashboard */
+      height: calc(var(--vh) * 230);
+    }
+
+    .hero__stage {
+      /* tray = grey panel, board = the grid of cards inside it */
+      --tw: min(81vw, calc(var(--vh) * 150));
+      --pad: calc(var(--tw) * 0.015);
+      --bw: calc(var(--tw) - var(--pad) * 2);
+      --bh: calc(var(--bw) * 1240 / 1952);
+      --top: max(calc(var(--vh) * 8), calc((var(--vh) * 100 - var(--bh)) / 2 - var(--pad)));
+
+      position: sticky;
+      top: 0;
+      height: calc(var(--vh) * 100);
+      min-height: 520px;
+      overflow: hidden;
+      background: var(--paper);
+      isolation: isolate;
+    }
+
+    .hero__top {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      will-change: transform;
+    }
+
+    /* ---------- Nav ---------- */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+      padding: 0 var(--gutter);
+      font-size: 13.5px;
+      font-weight: 400;
+      letter-spacing: -0.005em;
+    }
+
+    .nav__group {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav__logo {
+      display: block;
+      width: 23px;
+      height: 20px;
+      margin-right: 29px;
+    }
+
+    .nav__logo svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 33px;
+      list-style: none;
+    }
+
+    .nav__links a,
+    .nav__demo {
+      transition: opacity 0.2s ease;
+    }
+
+    .nav__links a:hover,
+    .nav__demo:hover {
+      opacity: 0.6;
+    }
+
+    .nav__demo {
+      margin-right: 29px;
+    }
+
+    .nav__signin {
+      display: inline-flex;
+      align-items: center;
+      height: 27px;
+      padding: 0 11px;
+      border-radius: 4px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+      transition: background-color 0.2s ease;
+    }
+
+    .nav__signin:hover {
+      background: #333;
+    }
+
+    /* ---------- Copy ---------- */
+    .hero__content {
+      width: fit-content;
+      margin: 0 auto;
+      padding: clamp(40px, calc(var(--vh) * 20), 230px) 20px 0;
+      color: var(--navy);
+    }
+
+    .hero__title {
+      font-family: "Instrument Serif", "Times New Roman", serif;
+      font-size: 50px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      /* Reference face is a narrower cut than Instrument Serif */
+      transform: scaleX(0.88);
+      transform-origin: 0 50%;
+    }
+
+    .hero__text {
+      margin-top: 21px;
+      font-size: 14.5px;
+      font-weight: 400;
+      line-height: 21px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero__text span {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3em;
+      height: 36px;
+      margin-top: 17px;
+      padding: 0 20px;
+      border-radius: 4px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn em {
+      font-family: "Caveat Brush", "Comic Sans MS", cursive;
+      font-size: 1.14em;
+      font-style: italic;
+      letter-spacing: 0;
+    }
+
+    .btn:hover {
+      background: #333;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible,
+    .nav a:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    /* ---------- Dashboard ---------- */
+    .hero__tray {
+      position: absolute;
+      z-index: 2;
+      top: var(--top);
+      left: 50%;
+      width: var(--tw);
+      height: calc(var(--bh) + var(--pad) * 2);
+      margin-left: calc(var(--tw) / -2);
+      border: 1px solid #ebebeb;
+      border-radius: 8px;
+      background: var(--tray);
+      will-change: transform;
+    }
+
+    .hero__board {
+      position: absolute;
+      z-index: 3;
+      top: calc(var(--top) + var(--pad));
+      left: 50%;
+      width: var(--bw);
+      height: var(--bh);
+      margin-left: calc(var(--bw) / -2);
+      perspective: 1400px;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .card {
+      position: absolute;
+      border-radius: calc(var(--bw) * 0.0075);
+      background-color: #fff;
+      background-repeat: no-repeat;
+      box-shadow: 0 1px 2px rgba(20, 20, 40, 0.04), 0 10px 30px -12px rgba(20, 20, 40, 0.14);
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    /* ---------- Tablet ---------- */
+    @media (max-width: 900px) {
+      .nav__links {
+        gap: 22px;
+      }
+
+      .hero__stage {
+        --tw: 94vw;
+      }
+    }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 600px) {
+      .nav__links,
+      .nav__demo {
+        display: none;
+      }
+
+      .hero__content {
+        padding-top: clamp(28px, calc(var(--vh) * 9), 90px);
+      }
+
+      .hero__title {
+        font-size: 46px;
+      }
+
+      /* Board is wider than the screen so the cards stay legible; edges bleed off */
+      .hero__stage {
+        --tw: 168vw;
+      }
+
+      .hero__tray {
+        border-radius: 0;
+      }
+    }
+
+    /* Short landscape screens */
+    @media (max-height: 560px) {
+      .hero__content {
+        padding-top: 16px;
+      }
+
+      .hero__title {
+        font-size: 40px;
+      }
+
+      .hero__text {
+        margin-top: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn,
+      .nav a {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__stage">
+      <div class="hero__top">
+        <nav class="nav" aria-label="Primary">
+          <div class="nav__group">
+            <a class="nav__logo" href="#" aria-label="Home">
+              <svg viewBox="0 0 46 40" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 37C6 24 10 9 14 4c4-3 1 18 2 27 2-8 6-21 10-22 4 0 0 19 3 22 4 3 10-9 14-16" />
+              </svg>
+            </a>
+            <ul class="nav__links">
+              <li><a href="#">Pricing</a></li>
+              <li><a href="#">Docs</a></li>
+              <li><a href="#">Blogs</a></li>
+              <li><a href="#">Download</a></li>
+            </ul>
+          </div>
+          <div class="nav__group">
+            <a class="nav__demo" href="#">Book a Demo</a>
+            <a class="nav__signin" href="#">Sign in</a>
+          </div>
+        </nav>
+
+        <div class="hero__content">
+          <h1 class="hero__title">Get Organized.</h1>
+          <p class="hero__text">
+            <span>All your tools, organized with ease.</span>
+            <span>Switch by context when you please.</span>
+            <span>No more juggling tabs all day.</span>
+            <span>Make your moves without delay,</span>
+            <span>No dropped balls along the way.</span>
+            <span>Start Making Today! ✨</span>
+          </p>
+          <a class="btn" href="#">Get Started – <em>its FREE</em></a>
+        </div>
+      </div>
+
+      <div class="hero__tray" aria-hidden="true"></div>
+      <div
+        class="hero__board"
+        role="img"
+        aria-label="Dashboard widgets: clock, collection, work notes, calendar, world clock, pull requests, signups, tasks and upcoming events"
+      ></div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var SRC = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20261010_083043_651b90cd-4ecf-42fc-ae42-c9e663c5895d.png";
+      var IMG_W = 2048, IMG_H = 1360;
+      // Grid bounds inside the sprite
+      var GX = 48, GY = 56, GW = 1952, GH = 1240;
+
+      // Each card: its rect in the sprite, then its scattered start state —
+      // dx/dy offset (fractions of board width), rotation (deg), stack order.
+      var CARDS = [
+        { n: "clock",      r: [48, 56, 484, 248],     dx: 0.037,  dy: 0.04,   rot: 5,   z: 1 },
+        { n: "collection", r: [48, 324, 484, 388],    dx: -0.003, dy: 0.03,   rot: -10, z: 3 },
+        { n: "notes",      r: [48, 736, 484, 560],    dx: 0.112,  dy: -0.233, rot: -8,  z: 5 },
+        { n: "calendar",   r: [556, 56, 456, 1068],   dx: 0,      dy: 0,      rot: -4,  z: 2 },
+        { n: "campaigns",  r: [556, 1144, 456, 152],  dx: 0.013,  dy: -0.297, rot: 3,   z: 8 },
+        { n: "worldclock", r: [1036, 56, 464, 412],   dx: -0.007, dy: -0.005, rot: 6,   z: 1 },
+        { n: "pulls",      r: [1036, 484, 464, 348],  dx: -0.032, dy: -0.139, rot: 1,   z: 4 },
+        { n: "signups",    r: [1036, 848, 464, 332],  dx: -0.097, dy: -0.2,   rot: -12, z: 6 },
+        { n: "launch",     r: [1036, 1196, 464, 100], dx: 0.055,  dy: -0.293, rot: 6,   z: 8 },
+        { n: "tasks",      r: [1520, 56, 480, 624],   dx: -0.089, dy: 0.048,  rot: 8,   z: 3 },
+        { n: "events",     r: [1520, 700, 480, 596],  dx: -0.009, dy: -0.185, rot: 14,  z: 7 }
+      ];
+
+      var hero = document.querySelector(".hero");
+      var stage = document.querySelector(".hero__stage");
+      var top = document.querySelector(".hero__top");
+      var tray = document.querySelector(".hero__tray");
+      var board = document.querySelector(".hero__board");
+      var btn = document.querySelector(".btn");
+
+      CARDS.forEach(function (c) {
+        var x = c.r[0], y = c.r[1], w = c.r[2], h = c.r[3];
+        var el = document.createElement("div");
+        el.className = "card card--" + c.n;
+        el.style.left = ((x - GX) / GW) * 100 + "%";
+        el.style.top = ((y - GY) / GH) * 100 + "%";
+        el.style.width = (w / GW) * 100 + "%";
+        el.style.height = (h / GH) * 100 + "%";
+        el.style.zIndex = c.z;
+        el.style.backgroundImage = 'url("' + SRC + '")';
+        el.style.backgroundSize = (IMG_W / w) * 100 + "% " + (IMG_H / h) * 100 + "%";
+        el.style.backgroundPosition = (x / (IMG_W - w)) * 100 + "% " + (y / (IMG_H - h)) * 100 + "%";
+        board.appendChild(el);
+        c.el = el;
+      });
+
+      var m = { dist: 1, boardShift: 0, trayShift: 0, bw: 0 };
+      var current = -1;
+      var target = 0;
+      var ticking = false;
+
+      function measure() {
+        var vh = stage.clientHeight;
+        var topRect = top.getBoundingClientRect();
+        var copyBottom = btn.getBoundingClientRect().bottom - topRect.top;
+        m.bw = board.offsetWidth;
+        m.dist = hero.offsetHeight - vh - vh * 0.4;
+        // Cards start fanned out just under the button; tray peeks over the bottom edge
+        m.boardShift = Math.max(copyBottom + 27 - board.offsetTop, 0);
+        m.trayShift = Math.max(vh - 15 - tray.offsetTop, 0);
+      }
+
+      function clamp01(v) {
+        return v < 0 ? 0 : v > 1 ? 1 : v;
+      }
+
+      function render(p) {
+        var settle = p * p * (3 - 2 * p);
+        var rest = 1 - settle;
+
+        top.style.transform = "translate3d(0," + -p * m.dist + "px,0)";
+        tray.style.transform = "translate3d(0," + (1 - p) * m.trayShift + "px,0)";
+        board.style.transform = "translate3d(0," + (1 - p) * m.boardShift + "px,0)";
+
+        for (var i = 0; i < CARDS.length; i++) {
+          var c = CARDS[i];
+          c.el.style.transform =
+            "translate3d(" + c.dx * m.bw * rest + "px," + c.dy * m.bw * rest + "px,0) " +
+            "rotateX(" + 16 * rest + "deg) rotateZ(" + c.rot * rest + "deg)";
+        }
+      }
+
+      function readTarget() {
+        target = clamp01(-hero.getBoundingClientRect().top / m.dist);
+      }
+
+      function frame() {
+        var next = current < 0 ? target : current + (target - current) * 0.16;
+        if (Math.abs(target - next) < 0.0005) next = target;
+        current = next;
+        render(current);
+        if (current !== target) {
+          requestAnimationFrame(frame);
+        } else {
+          ticking = false;
+        }
+      }
+
+      function kick() {
+        readTarget();
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(frame);
+        }
+      }
+
+      function reset() {
+        measure();
+        readTarget();
+        current = target;
+        render(current);
+      }
+
+      window.addEventListener("scroll", kick, { passive: true });
+      window.addEventListener("resize", reset);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(reset);
+      reset();
+    })();
+  </script>
+</body>
+</html>
